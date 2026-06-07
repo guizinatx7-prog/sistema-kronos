@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; background: #7ea8a5; font-family: 'Courier New', monospace; }
+        
+        #login-screen { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #cceae8; z-index: 100; }
+        
+        #system-ui { display: none; padding: 20px; }
+        .menu-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #000; color: #fff; border: none; cursor: pointer; text-align: left; }
+        .menu-btn:hover { background: #333; }
+        
+        input { padding: 10px; border: 2px solid #000; background: transparent; text-align: center; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <p>QUANTOS NEGÃO PEGOU A THALITA?</p>
+        <input type="text" id="pass">
+        <button onclick="checkPass()">ACCESS</button>
+    </div>
+
+    <div id="system-ui">
+        <h2>QUAIS JOGOS VOCÊ QUER JOGAR?</h2>
+        <button class="menu-btn" onclick="selectGame('Minecraft')">▶ Minecraft</button>
+        <button class="menu-btn" onclick="selectGame('Roblox')">▶ Roblox</button>
+        <button class="menu-btn" onclick="selectRandomGame()">▶ Algum jogo aleatório da Play Store</button>
+        <button class="menu-btn" onclick="resetUI()" style="background: #a0c4c2; color: #000;">[REBOOT SYSTEM]</button>
+    </div>
+
+    <script>
+        function checkPass() {
+            if(document.getElementById('pass').value === '12') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('system-ui').style.display = 'block';
+            } else {
+                alert('ACESSO NEGADO');
+            }
+        }
+
+        function selectGame(game) {
+            alert('INICIALIZANDO: ' + game + '...');
+        }
+
+        function selectRandomGame() {
+            const games = ["Subway Surfers", "Free Fire", "Candy Crush", "Among Us", "Stumble Guys"];
+            const random = games[Math.floor(Math.random() * games.length)];
+            alert('SORTEIO... O jogo escolhido foi: ' + random);
+        }
+
+        function resetUI() {
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('system-ui').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
