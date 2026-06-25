@@ -1,59 +1,185 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para a Thalita!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; background: #7ea8a5; font-family: 'Courier New', monospace; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        #login-screen { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #cceae8; z-index: 100; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            min-height: 100vh; 
+            background: radial-gradient(circle at top right, #fecfef, #ff9a9e); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px; 
+            overflow: hidden;
+        }
+
+        /* Efeito Avançado de Vidro Líquido (iOS 26 High-Gloss Style) */
+        .card { 
+            background: rgba(255, 255, 255, 0.22); 
+            backdrop-filter: blur(35px) saturate(220%); 
+            -webkit-backdrop-filter: blur(35px) saturate(220%); 
+            padding: 40px 30px; 
+            border-radius: 40px; 
+            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.12), 
+                        inset 0 1px 4px rgba(255, 255, 255, 0.7),
+                        inset 0 -10px 30px rgba(255, 255, 255, 0.15);
+            text-align: center; 
+            max-width: 480px; 
+            width: 100%; 
+            border: 1px solid rgba(255, 255, 255, 0.5); 
+            position: relative;
+        }
+
+        .emoji { font-size: 60px; margin-bottom: 10px; }
+
+        /* Container de vidro lapidado para a foto */
+        .container-foto { 
+            width: 130px; 
+            height: 130px; 
+            margin: 0 auto 20px auto; 
+            border-radius: 50%; 
+            padding: 6px; 
+            background: rgba(255, 255, 255, 0.4); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255, 255, 255, 0.6); 
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
         
-        #system-ui { display: none; padding: 20px; }
-        .menu-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #000; color: #fff; border: none; cursor: pointer; text-align: left; }
-        .menu-btn:hover { background: #333; }
+        .foto-perfil { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         
-        input { padding: 10px; border: 2px solid #000; background: transparent; text-align: center; margin-bottom: 10px; }
+        h1 { color: #5a183e; font-size: 1.8rem; font-weight: 800; margin-bottom: 25px; }
+        h1 span { color: #d81b60; }
+
+        .mensagem-topicos { text-align: left; list-style: none; margin-bottom: 25px; }
+        .mensagem-topicos li { color: #444; font-size: 1rem; margin-bottom: 15px; display: flex; align-items: flex-start; gap: 10px; font-weight: 500; }
+        
+        /* Divisão de Grid para isolar completamente as zonas de clique dos botões */
+        .botoes-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+            margin-top: 20px; 
+            height: 140px; 
+            align-items: center;
+        }
+
+        /* Área restrita onde o botão fujão pode brincar sem interferir no outro */
+        .zona-fuga { 
+            position: relative; 
+            width: 100%; 
+            height: 100%; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .btn { padding: 12px 20px; font-size: 0.95rem; font-weight: 600; border-radius: 25px; cursor: pointer; border: none; width: 100%; max-width: 160px; }
+        
+        /* Botão do sucesso estável */
+        .btn-sim { 
+            background: rgba(255, 255, 255, 0.65); 
+            color: #d81b60; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .btn-sim:active { transform: scale(0.95); }
+        
+        /* Botão esquivo confinado na sua própria zona */
+        .btn-fugir { 
+            background: linear-gradient(135deg, #ff4d4d, #d32f2f); 
+            color: white; 
+            position: absolute; 
+            box-shadow: 0 6px 15px rgba(211, 47, 47, 0.3);
+            transition: all 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 10;
+        }
+
+        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen">
-        <p>QUANTOS NEGÃO PEGOU A THALITA?</p>
-        <input type="text" id="pass">
-        <button onclick="checkPass()">ACCESS</button>
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="card">
+        <div id="tela-1">
+            <div class="emoji">🤔</div>
+            <h1>Thalita,<br>você é feiosa?</h1>
+            <div class="botoes-grid">
+                <div>
+                    <button class="btn btn-sim" onclick="proximaTela(2)">Sim</button>
+                </div>
+                <div class="zona-fuga" id="zona-1">
+                    <button class="btn btn-fugir" id="btn-nao" onmouseover="fugir('btn-nao', 'zona-1')" ontouchstart="fugir('btn-nao', 'zona-1')">Não</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="tela-2" style="display: none;">
+            <div class="emoji">🧼</div>
+            <h1>KKKK, SABIA.<br>Você tomou banho quando?</h1>
+            <div class="botoes-grid">
+                <div class="zona-fuga" id="zona-2">
+                    <button class="btn btn-fugir" id="btn-toda-hora" onmouseover="fugir('btn-toda-hora', 'zona-2')" ontouchstart="fugir('btn-toda-hora', 'zona-2')">Toda hora ué</button>
+                </div>
+                <div>
+                    <button class="btn btn-sim" onclick="proximaTela(3)">Sabado retrasado</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="tela-3" style="display: none;">
+            <div class="container-foto">
+                <img src="131262.jpg" alt="Thalita" class="foto-perfil">
+            </div>
+            <h1><span>Feliz Aniversário!</span></h1>
+            <ul class="mensagem-topicos">
+                <li><span>🖤</span> Parabéns, minha querida amiga do pé preto de sujo! Eu lhe desejo um feliz aniversário de coração.</li>
+                <li><span>🙏</span> Muito obrigado por ser alegre e gentil comigo, mesmo quando eu lhe xingo de inúmeros insultos kkkkkkkkkkkkkkkk.</li>
+                <li><span>✨</span> Você é muito especial para mim, bixa véia!</li>
+                <li><span>🌵</span> Enjoy your day, Nordestean girl!</li>
+            </ul>
+        </div>
     </div>
 
-    <div id="system-ui">
-        <h2>QUAIS JOGOS VOCÊ QUER JOGAR?</h2>
-        <button class="menu-btn" onclick="selectGame('Minecraft')">▶ Minecraft</button>
-        <button class="menu-btn" onclick="selectGame('Roblox')">▶ Roblox</button>
-        <button class="menu-btn" onclick="selectRandomGame()">▶ Algum jogo aleatório da Play Store</button>
-        <button class="menu-btn" onclick="resetUI()" style="background: #a0c4c2; color: #000;">[REBOOT SYSTEM]</button>
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
-        function checkPass() {
-            if(document.getElementById('pass').value === '12') {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('system-ui').style.display = 'block';
-            } else {
-                alert('ACESSO NEGADO');
+        function fugir(btnId, zonaId) {
+            const btn = document.getElementById(btnId);
+            const zona = document.getElementById(zonaId);
+            
+            // Pega o espaço exato da caixinha destinada apenas ao fujão
+            const limiteLargura = zona.clientWidth - btn.clientWidth;
+            const limiteAltura = zona.clientHeight - btn.clientHeight;
+            
+            // Gera coordenadas que NUNCA saem desse espaço separado
+            const randomX = Math.random() * limiteLargura;
+            const randomY = Math.random() * limiteAltura;
+            
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
+        }
+
+        function proximaTela(num) {
+            document.getElementById('tela-1').style.display = 'none';
+            document.getElementById('tela-2').style.display = 'none';
+            document.getElementById('tela-3').style.display = 'none';
+            
+            document.getElementById('tela-' + num).style.display = 'block';
+            
+            if(num === 3) {
+                confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
             }
-        }
-
-        function selectGame(game) {
-            alert('INICIALIZANDO: ' + game + '...');
-        }
-
-        function selectRandomGame() {
-            const games = ["Subway Surfers", "Free Fire", "Candy Crush", "Among Us", "Stumble Guys"];
-            const random = games[Math.floor(Math.random() * games.length)];
-            alert('SORTEIO... O jogo escolhido foi: ' + random);
-        }
-
-        function resetUI() {
-            document.getElementById('login-screen').style.display = 'flex';
-            document.getElementById('system-ui').style.display = 'none';
         }
     </script>
 </body>
